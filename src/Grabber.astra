@@ -1,0 +1,91 @@
+agent Grabber {
+
+  module Console C;
+  module EISAPI ei;
+  module Math math;
+  module System system;
+  module Prelude prelude;
+
+  types towerenv {
+  	formula holding(string);
+  	formula on(string, string);
+  	formula blocks(list);
+  	formula block(string);
+  }
+  
+  rule +!main(list args) {
+    ei.launch("towerenv", "towerenvAstra.jar");
+    ei.join("towerenv");
+    ei.link("gripper");
+    ei.startEnv();
+    
+    +blocks([]);
+    
+//    !solve();
+  }
+ 
+  rule +@eis("towerenv", "gripper", block(string Name)) {
+  	synchronized(tower) {
+  		query(blocks(list Arr));
+	  	list New = Arr + [Name];
+
+		-blocks(Arr);
+	  	+blocks(New);
+	  	
+	  	C.println(New);
+  	}
+  }
+  
+  rule +!solve() {
+  	while(true){
+  		query(blocks(list Arr));
+    	!shuffle(Arr, prelude.size(Arr));
+		C.println(Arr);
+    	!solveArr(Arr);
+    }
+  }
+  
+  rule +!solveArr([string Head| list Tail]) {
+  	string OtherHead = prelude.headAsString(Tail);
+  	!grab(OtherHead);
+  	!putdown(Head);
+  	!solveArr(Tail);
+  }
+  
+  rule +!solveArr([]) {
+  	C.print("Empty");
+  }
+  
+ rule +!shuffle(list in, int N) {
+     int i = 0;
+      while (i < N) {
+          int j = math.randomInt() % prelude.size(in);
+          int k = math.randomInt() % prelude.size(in);
+          prelude.swap(in, j, k);
+          i = i + 1;
+      }
+  }
+  
+  rule +!grabAnyOne(): EIS.on(string X, "table") & ~EIS.on(string Anything, X) {
+  	!grab(X);
+  }
+  
+  rule +!grabAnyOne(): EIS.on(string X, string Y) & ~EIS.on(string Anything, X) {
+  	!grab(X);
+  }
+  
+  rule +!grab(string X) {
+    EIS.pickup(X);
+    wait(EIS.holding(X));
+  }
+  
+  rule +!putdownAnywhere(): EIS.on(string X, string Y) & ~EIS.on(string Anything, X) {
+    !putdown(X);
+  }
+  
+  rule +!putdown(string Y): EIS.holding(string X) {
+    EIS.putdown(X, Y);
+    wait(~EIS.holding(X));
+  }
+
+}
