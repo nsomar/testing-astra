@@ -19,30 +19,51 @@ agent Grabber {
     ei.link("gripper");
     ei.startEnv();
     
-    +blocks([]);
+    +blocks(["a", "b", "c", "d"]);
     
-//    !solve();
+    !solve();
   }
  
   rule +@eis("towerenv", "gripper", block(string Name)) {
-  	synchronized(tower) {
-  		query(blocks(list Arr));
-	  	list New = Arr + [Name];
+//  	synchronized(tower) {
+  		C.println(Name);
+//  		string copy = Name;
+//  		query(blocks(list Arr));
+//  		C.println(Arr);
+//	  	list New = [] + [copy];
 
-		-blocks(Arr);
-	  	+blocks(New);
+//		-blocks(Arr);
+//	  	+blocks(New);
 	  	
-	  	C.println(New);
-  	}
+	  	C.println([Name]);
+//  	}
   }
   
   rule +!solve() {
-  	while(true){
-  		query(blocks(list Arr));
-    	!shuffle(Arr, prelude.size(Arr));
-		C.println(Arr);
-    	!solveArr(Arr);
-    }
+  	query(blocks(list Arr));
+	!shuffle(Arr, prelude.size(Arr));
+	C.println(Arr);
+	!solveArr(Arr);
+  }
+  
+  rule +!solveArr(list X): prelude.size(X) == 1 {
+  	C.print("Tower built");
+  	!clearTable();
+  }
+  
+  rule +!clearTable() {
+  	!clearPlaceOnTable();
+  }
+  
+  rule +!clearPlaceOnTable(): EIS.on(string X, string Y) & EIS.on(string Z, X) & ~EIS.on(string Anything, Z) {
+  	!grab(Z);
+  	!putOnTable();
+  	!clearPlaceOnTable();
+  }
+  
+  rule +!clearPlaceOnTable() {
+  	C.print("Tower cleared");
+  	!solve();
   }
   
   rule +!solveArr([string Head| list Tail]) {
@@ -50,10 +71,6 @@ agent Grabber {
   	!grab(OtherHead);
   	!putdown(Head);
   	!solveArr(Tail);
-  }
-  
-  rule +!solveArr([]) {
-  	C.print("Empty");
   }
   
  rule +!shuffle(list in, int N) {
@@ -86,6 +103,10 @@ agent Grabber {
   rule +!putdown(string Y): EIS.holding(string X) {
     EIS.putdown(X, Y);
     wait(~EIS.holding(X));
+  }
+  
+  rule +!putOnTable(): EIS.holding(string X) {
+    !putdown("table");
   }
 
 }

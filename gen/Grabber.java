@@ -86,9 +86,18 @@ public class Grabber extends ASTRAClass {
 						"Grabber", new int[] {22,4,25,3},
 						new Predicate("blocks", new Term[] {
 							new ListTerm(new Term[] {
-
+								Primitive.newPrimitive("a"),
+								Primitive.newPrimitive("b"),
+								Primitive.newPrimitive("c"),
+								Primitive.newPrimitive("d")
 							})
 						})
+					),
+					new Subgoal(
+						"Grabber", new int[] {24,4,25,3},
+						new Goal(
+							new Predicate("solve", new Term[] {})
+						)
 					)
 				}
 			)
@@ -103,57 +112,35 @@ public class Grabber extends ASTRAClass {
 			),
 			Predicate.TRUE,
 			new Block(
-				"Grabber", new int[] {27,56,37,3},
+				"Grabber", new int[] {27,56,40,3},
 				new Statement[] {
-					new SynchronizedBlock(
-						"Grabber", new int[] {28,6,37,3},
-						"tower",
-						new Block(
-							"Grabber", new int[] {28,6,37,3},
-							new Statement[] {
-								new Query(
-									"Grabber", new int[] {29,10,29,33},
-									new Predicate("blocks", new Term[] {
-										new Variable(Type.LIST, "Arr")
-									})
-								),
-								new Declaration(
-									new Variable(Type.LIST, "New"),
-									"Grabber", new int[] {30,10,36,7},
-									Operator.newOperator('+',
-										new Variable(Type.LIST, "Arr"),
-										new ListTerm(new Term[] {
-											new Variable(Type.STRING, "Name")
-										})
-									)
-								),
-								new BeliefUpdate('-',
-									"Grabber", new int[] {32,8,36,7},
-									new Predicate("blocks", new Term[] {
-										new Variable(Type.LIST, "Arr")
-									})
-								),
-								new BeliefUpdate('+',
-									"Grabber", new int[] {33,10,36,7},
-									new Predicate("blocks", new Term[] {
-										new Variable(Type.LIST, "New")
-									})
-								),
-								new ModuleCall("C",
-									"Grabber", new int[] {35,10,35,24},
-									new Predicate("println", new Term[] {
-										new Variable(Type.LIST, "New")
-									}),
-									new ModuleCallAdaptor() {
-										public boolean invoke(Intention intention, Predicate predicate) {
-											return ((astra.lang.Console) intention.getModule("Grabber","C")).println(
-												(astra.term.ListTerm) intention.evaluate(predicate.getTerm(0))
-											);
-										}
-									}
-								)
+					new ModuleCall("C",
+						"Grabber", new int[] {29,10,29,25},
+						new Predicate("println", new Term[] {
+							new Variable(Type.STRING, "Name")
+						}),
+						new ModuleCallAdaptor() {
+							public boolean invoke(Intention intention, Predicate predicate) {
+								return ((astra.lang.Console) intention.getModule("Grabber","C")).println(
+									(java.lang.String) intention.evaluate(predicate.getTerm(0))
+								);
 							}
-						)
+						}
+					),
+					new ModuleCall("C",
+						"Grabber", new int[] {38,10,38,27},
+						new Predicate("println", new Term[] {
+							new ListTerm(new Term[] {
+								new Variable(Type.STRING, "Name")
+							})
+						}),
+						new ModuleCallAdaptor() {
+							public boolean invoke(Intention intention, Predicate predicate) {
+								return ((astra.lang.Console) intention.getModule("Grabber","C")).println(
+									(astra.term.ListTerm) intention.evaluate(predicate.getTerm(0))
+								);
+							}
+						}
 					)
 				}
 			)
@@ -166,67 +153,218 @@ public class Grabber extends ASTRAClass {
 			),
 			Predicate.TRUE,
 			new Block(
-				"Grabber", new int[] {39,17,46,3},
+				"Grabber", new int[] {42,17,47,3},
 				new Statement[] {
-					new While(
-						"Grabber", new int[] {40,6,46,3},
-						Predicate.TRUE,
-						new Block(
-							"Grabber", new int[] {40,17,45,5},
-							new Statement[] {
-								new Query(
-									"Grabber", new int[] {41,10,41,33},
-									new Predicate("blocks", new Term[] {
-										new Variable(Type.LIST, "Arr")
-									})
-								),
-								new Subgoal(
-									"Grabber", new int[] {42,8,45,5},
-									new Goal(
-										new Predicate("shuffle", new Term[] {
-											new Variable(Type.LIST, "Arr"),
-											new ModuleTerm("prelude", Type.INTEGER,
-												new Predicate("size", new Term[] {
-													new Variable(Type.LIST, "Arr")
-												}),
-												new ModuleTermAdaptor() {
-													public Object invoke(Intention intention, Predicate predicate) {
-														return ((astra.lang.Prelude) intention.getModule("Grabber","prelude")).size(
-															(astra.term.ListTerm) intention.evaluate(predicate.getTerm(0))
-														);
-													}
-													public Object invoke(BindingsEvaluateVisitor visitor, Predicate predicate) {
-														return ((astra.lang.Prelude) visitor.agent().getModule("Grabber","prelude")).size(
-															(astra.term.ListTerm) visitor.evaluate(predicate.getTerm(0))
-														);
-													}
-												}
-											)
-										})
-									)
-								),
-								new ModuleCall("C",
-									"Grabber", new int[] {43,8,43,22},
-									new Predicate("println", new Term[] {
+					new Query(
+						"Grabber", new int[] {43,6,43,29},
+						new Predicate("blocks", new Term[] {
+							new Variable(Type.LIST, "Arr")
+						})
+					),
+					new Subgoal(
+						"Grabber", new int[] {44,4,47,3},
+						new Goal(
+							new Predicate("shuffle", new Term[] {
+								new Variable(Type.LIST, "Arr"),
+								new ModuleTerm("prelude", Type.INTEGER,
+									new Predicate("size", new Term[] {
 										new Variable(Type.LIST, "Arr")
 									}),
-									new ModuleCallAdaptor() {
-										public boolean invoke(Intention intention, Predicate predicate) {
-											return ((astra.lang.Console) intention.getModule("Grabber","C")).println(
+									new ModuleTermAdaptor() {
+										public Object invoke(Intention intention, Predicate predicate) {
+											return ((astra.lang.Prelude) intention.getModule("Grabber","prelude")).size(
 												(astra.term.ListTerm) intention.evaluate(predicate.getTerm(0))
 											);
 										}
+										public Object invoke(BindingsEvaluateVisitor visitor, Predicate predicate) {
+											return ((astra.lang.Prelude) visitor.agent().getModule("Grabber","prelude")).size(
+												(astra.term.ListTerm) visitor.evaluate(predicate.getTerm(0))
+											);
+										}
 									}
-								),
-								new Subgoal(
-									"Grabber", new int[] {44,8,45,5},
-									new Goal(
-										new Predicate("solveArr", new Term[] {
-											new Variable(Type.LIST, "Arr")
-										})
-									)
 								)
+							})
+						)
+					),
+					new ModuleCall("C",
+						"Grabber", new int[] {45,4,45,18},
+						new Predicate("println", new Term[] {
+							new Variable(Type.LIST, "Arr")
+						}),
+						new ModuleCallAdaptor() {
+							public boolean invoke(Intention intention, Predicate predicate) {
+								return ((astra.lang.Console) intention.getModule("Grabber","C")).println(
+									(astra.term.ListTerm) intention.evaluate(predicate.getTerm(0))
+								);
 							}
+						}
+					),
+					new Subgoal(
+						"Grabber", new int[] {46,4,47,3},
+						new Goal(
+							new Predicate("solveArr", new Term[] {
+								new Variable(Type.LIST, "Arr")
+							})
+						)
+					)
+				}
+			)
+		));
+		addRule(new Rule(
+			new GoalEvent('+',
+				new Goal(
+					new Predicate("solveArr", new Term[] {
+						new Variable(Type.LIST, "X")
+					})
+				)
+			),
+			new Comparison("==",
+				new ModuleTerm("prelude", Type.INTEGER,
+					new Predicate("size", new Term[] {
+						new Variable(Type.LIST, "X")
+					}),
+					new ModuleTermAdaptor() {
+						public Object invoke(Intention intention, Predicate predicate) {
+							return ((astra.lang.Prelude) intention.getModule("Grabber","prelude")).size(
+								(astra.term.ListTerm) intention.evaluate(predicate.getTerm(0))
+							);
+						}
+						public Object invoke(BindingsEvaluateVisitor visitor, Predicate predicate) {
+							return ((astra.lang.Prelude) visitor.agent().getModule("Grabber","prelude")).size(
+								(astra.term.ListTerm) visitor.evaluate(predicate.getTerm(0))
+							);
+						}
+					}
+				),
+				Primitive.newPrimitive(1)
+			),
+			new Block(
+				"Grabber", new int[] {49,47,52,3},
+				new Statement[] {
+					new ModuleCall("C",
+						"Grabber", new int[] {50,6,50,28},
+						new Predicate("print", new Term[] {
+							Primitive.newPrimitive("Tower built")
+						}),
+						new ModuleCallAdaptor() {
+							public boolean invoke(Intention intention, Predicate predicate) {
+								return ((astra.lang.Console) intention.getModule("Grabber","C")).print(
+									(java.lang.String) intention.evaluate(predicate.getTerm(0))
+								);
+							}
+						}
+					),
+					new Subgoal(
+						"Grabber", new int[] {51,6,52,3},
+						new Goal(
+							new Predicate("clearTable", new Term[] {})
+						)
+					)
+				}
+			)
+		));
+		addRule(new Rule(
+			new GoalEvent('+',
+				new Goal(
+					new Predicate("clearTable", new Term[] {})
+				)
+			),
+			Predicate.TRUE,
+			new Block(
+				"Grabber", new int[] {54,22,56,3},
+				new Statement[] {
+					new Subgoal(
+						"Grabber", new int[] {55,6,56,3},
+						new Goal(
+							new Predicate("clearPlaceOnTable", new Term[] {})
+						)
+					)
+				}
+			)
+		));
+		addRule(new Rule(
+			new GoalEvent('+',
+				new Goal(
+					new Predicate("clearPlaceOnTable", new Term[] {})
+				)
+			),
+			new AND(
+				new EISFormula(
+					new Predicate("on", new Term[] {
+						new Variable(Type.STRING, "X"),
+						new Variable(Type.STRING, "Y")
+					})
+				),
+				new AND(
+					new EISFormula(
+						new Predicate("on", new Term[] {
+							new Variable(Type.STRING, "Z"),
+							new Variable(Type.STRING, "X")
+						})
+					),
+					new NOT(
+						new EISFormula(
+							new Predicate("on", new Term[] {
+								new Variable(Type.STRING, "Anything"),
+								new Variable(Type.STRING, "Z")
+							})
+						)
+					)
+				)
+			),
+			new Block(
+				"Grabber", new int[] {58,109,62,3},
+				new Statement[] {
+					new Subgoal(
+						"Grabber", new int[] {59,6,62,3},
+						new Goal(
+							new Predicate("grab", new Term[] {
+								new Variable(Type.STRING, "Z")
+							})
+						)
+					),
+					new Subgoal(
+						"Grabber", new int[] {60,6,62,3},
+						new Goal(
+							new Predicate("putOnTable", new Term[] {})
+						)
+					),
+					new Subgoal(
+						"Grabber", new int[] {61,6,62,3},
+						new Goal(
+							new Predicate("clearPlaceOnTable", new Term[] {})
+						)
+					)
+				}
+			)
+		));
+		addRule(new Rule(
+			new GoalEvent('+',
+				new Goal(
+					new Predicate("clearPlaceOnTable", new Term[] {})
+				)
+			),
+			Predicate.TRUE,
+			new Block(
+				"Grabber", new int[] {64,29,67,3},
+				new Statement[] {
+					new ModuleCall("C",
+						"Grabber", new int[] {65,6,65,30},
+						new Predicate("print", new Term[] {
+							Primitive.newPrimitive("Tower cleared")
+						}),
+						new ModuleCallAdaptor() {
+							public boolean invoke(Intention intention, Predicate predicate) {
+								return ((astra.lang.Console) intention.getModule("Grabber","C")).print(
+									(java.lang.String) intention.evaluate(predicate.getTerm(0))
+								);
+							}
+						}
+					),
+					new Subgoal(
+						"Grabber", new int[] {66,6,67,3},
+						new Goal(
+							new Predicate("solve", new Term[] {})
 						)
 					)
 				}
@@ -245,11 +383,11 @@ public class Grabber extends ASTRAClass {
 			),
 			Predicate.TRUE,
 			new Block(
-				"Grabber", new int[] {48,44,53,3},
+				"Grabber", new int[] {69,44,74,3},
 				new Statement[] {
 					new Declaration(
 						new Variable(Type.STRING, "OtherHead"),
-						"Grabber", new int[] {49,6,53,3},
+						"Grabber", new int[] {70,6,74,3},
 						new ModuleTerm("prelude", Type.STRING,
 							new Predicate("headAsString", new Term[] {
 								new Variable(Type.LIST, "Tail")
@@ -269,7 +407,7 @@ public class Grabber extends ASTRAClass {
 						)
 					),
 					new Subgoal(
-						"Grabber", new int[] {50,6,53,3},
+						"Grabber", new int[] {71,6,74,3},
 						new Goal(
 							new Predicate("grab", new Term[] {
 								new Variable(Type.STRING, "OtherHead")
@@ -277,7 +415,7 @@ public class Grabber extends ASTRAClass {
 						)
 					),
 					new Subgoal(
-						"Grabber", new int[] {51,6,53,3},
+						"Grabber", new int[] {72,6,74,3},
 						new Goal(
 							new Predicate("putdown", new Term[] {
 								new Variable(Type.STRING, "Head")
@@ -285,42 +423,12 @@ public class Grabber extends ASTRAClass {
 						)
 					),
 					new Subgoal(
-						"Grabber", new int[] {52,6,53,3},
+						"Grabber", new int[] {73,6,74,3},
 						new Goal(
 							new Predicate("solveArr", new Term[] {
 								new Variable(Type.LIST, "Tail")
 							})
 						)
-					)
-				}
-			)
-		));
-		addRule(new Rule(
-			new GoalEvent('+',
-				new Goal(
-					new Predicate("solveArr", new Term[] {
-						new ListTerm(new Term[] {
-
-						})
-					})
-				)
-			),
-			Predicate.TRUE,
-			new Block(
-				"Grabber", new int[] {55,22,57,3},
-				new Statement[] {
-					new ModuleCall("C",
-						"Grabber", new int[] {56,6,56,22},
-						new Predicate("print", new Term[] {
-							Primitive.newPrimitive("Empty")
-						}),
-						new ModuleCallAdaptor() {
-							public boolean invoke(Intention intention, Predicate predicate) {
-								return ((astra.lang.Console) intention.getModule("Grabber","C")).print(
-									(java.lang.String) intention.evaluate(predicate.getTerm(0))
-								);
-							}
-						}
 					)
 				}
 			)
@@ -336,25 +444,25 @@ public class Grabber extends ASTRAClass {
 			),
 			Predicate.TRUE,
 			new Block(
-				"Grabber", new int[] {59,32,67,3},
+				"Grabber", new int[] {76,32,84,3},
 				new Statement[] {
 					new Declaration(
 						new Variable(Type.INTEGER, "i"),
-						"Grabber", new int[] {60,5,67,3},
+						"Grabber", new int[] {77,5,84,3},
 						Primitive.newPrimitive(0)
 					),
 					new While(
-						"Grabber", new int[] {61,6,67,3},
+						"Grabber", new int[] {78,6,84,3},
 						new Comparison("<",
 							new Variable(Type.INTEGER, "i"),
 							new Variable(Type.INTEGER, "N")
 						),
 						new Block(
-							"Grabber", new int[] {61,20,66,7},
+							"Grabber", new int[] {78,20,83,7},
 							new Statement[] {
 								new Declaration(
 									new Variable(Type.INTEGER, "j"),
-									"Grabber", new int[] {62,10,66,7},
+									"Grabber", new int[] {79,10,83,7},
 									Operator.newOperator('%',
 										new ModuleTerm("math", Type.INTEGER,
 											new Predicate("randomInt", new Term[] {}),
@@ -390,7 +498,7 @@ public class Grabber extends ASTRAClass {
 								),
 								new Declaration(
 									new Variable(Type.INTEGER, "k"),
-									"Grabber", new int[] {63,10,66,7},
+									"Grabber", new int[] {80,10,83,7},
 									Operator.newOperator('%',
 										new ModuleTerm("math", Type.INTEGER,
 											new Predicate("randomInt", new Term[] {}),
@@ -425,7 +533,7 @@ public class Grabber extends ASTRAClass {
 									)
 								),
 								new ModuleCall("prelude",
-									"Grabber", new int[] {64,10,64,32},
+									"Grabber", new int[] {81,10,81,32},
 									new Predicate("swap", new Term[] {
 										new Variable(Type.LIST, "in"),
 										new Variable(Type.INTEGER, "j"),
@@ -443,7 +551,7 @@ public class Grabber extends ASTRAClass {
 								),
 								new Assignment(
 									new Variable(Type.INTEGER, "i"),
-									"Grabber", new int[] {65,10,66,7},
+									"Grabber", new int[] {82,10,83,7},
 									Operator.newOperator('+',
 										new Variable(Type.INTEGER, "i"),
 										Primitive.newPrimitive(1)
@@ -478,10 +586,10 @@ public class Grabber extends ASTRAClass {
 				)
 			),
 			new Block(
-				"Grabber", new int[] {69,79,71,3},
+				"Grabber", new int[] {86,79,88,3},
 				new Statement[] {
 					new Subgoal(
-						"Grabber", new int[] {70,6,71,3},
+						"Grabber", new int[] {87,6,88,3},
 						new Goal(
 							new Predicate("grab", new Term[] {
 								new Variable(Type.STRING, "X")
@@ -514,10 +622,10 @@ public class Grabber extends ASTRAClass {
 				)
 			),
 			new Block(
-				"Grabber", new int[] {73,80,75,3},
+				"Grabber", new int[] {90,80,92,3},
 				new Statement[] {
 					new Subgoal(
-						"Grabber", new int[] {74,6,75,3},
+						"Grabber", new int[] {91,6,92,3},
 						new Goal(
 							new Predicate("grab", new Term[] {
 								new Variable(Type.STRING, "X")
@@ -537,16 +645,16 @@ public class Grabber extends ASTRAClass {
 			),
 			Predicate.TRUE,
 			new Block(
-				"Grabber", new int[] {77,24,80,3},
+				"Grabber", new int[] {94,24,97,3},
 				new Statement[] {
 					new EISCall(
-						"Grabber", new int[] {78,4,80,3},
+						"Grabber", new int[] {95,4,97,3},
 						new Predicate("pickup", new Term[] {
 							new Variable(Type.STRING, "X")
 						})
 					),
 					new Wait(
-						"Grabber", new int[] {79,4,80,3},
+						"Grabber", new int[] {96,4,97,3},
 						new EISFormula(
 							new Predicate("holding", new Term[] {
 								new Variable(Type.STRING, "X")
@@ -579,10 +687,10 @@ public class Grabber extends ASTRAClass {
 				)
 			),
 			new Block(
-				"Grabber", new int[] {82,85,84,3},
+				"Grabber", new int[] {99,85,101,3},
 				new Statement[] {
 					new Subgoal(
-						"Grabber", new int[] {83,4,84,3},
+						"Grabber", new int[] {100,4,101,3},
 						new Goal(
 							new Predicate("putdown", new Term[] {
 								new Variable(Type.STRING, "X")
@@ -606,23 +714,48 @@ public class Grabber extends ASTRAClass {
 				})
 			),
 			new Block(
-				"Grabber", new int[] {86,50,89,3},
+				"Grabber", new int[] {103,50,106,3},
 				new Statement[] {
 					new EISCall(
-						"Grabber", new int[] {87,4,89,3},
+						"Grabber", new int[] {104,4,106,3},
 						new Predicate("putdown", new Term[] {
 							new Variable(Type.STRING, "X"),
 							new Variable(Type.STRING, "Y")
 						})
 					),
 					new Wait(
-						"Grabber", new int[] {88,4,89,3},
+						"Grabber", new int[] {105,4,106,3},
 						new NOT(
 							new EISFormula(
 								new Predicate("holding", new Term[] {
 									new Variable(Type.STRING, "X")
 								})
 							)
+						)
+					)
+				}
+			)
+		));
+		addRule(new Rule(
+			new GoalEvent('+',
+				new Goal(
+					new Predicate("putOnTable", new Term[] {})
+				)
+			),
+			new EISFormula(
+				new Predicate("holding", new Term[] {
+					new Variable(Type.STRING, "X")
+				})
+			),
+			new Block(
+				"Grabber", new int[] {108,45,110,3},
+				new Statement[] {
+					new Subgoal(
+						"Grabber", new int[] {109,4,110,3},
+						new Goal(
+							new Predicate("putdown", new Term[] {
+								Primitive.newPrimitive("table")
+							})
 						)
 					)
 				}
